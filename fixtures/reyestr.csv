@@ -1,0 +1,10 @@
+Reyestr — səs hərəkətləri,,,,,,
+"Bir sətir = bir əməliyyat. Səs: artım müsbət, xərc mənfi. AZN yalnız alışlarda. Mövsüm: YYYY-AA. Hər şey açıqdır — iştirakçılar bu vərəqi oxuya bilir.",,,,,,
+Tarix,İştirakçı,Əməliyyat növü,Səs (+/-),AZN,Qeyd,Mövsüm
+2026-10-01,Nümunə A,Aylıq pay,100,,Mövsüm başlanğıcı,2026-10
+2026-10-01,Nümunə B,Aylıq pay,100,,Mövsüm başlanğıcı,2026-10
+2026-10-01,Nümunə C,Aylıq pay,100,,Mövsüm başlanğıcı,2026-10
+2026-10-03,Nümunə A,İfaçı,-50,,"Robyn (İsveç, yerli, 50 mln+): 100 × 0,5 × 1,00",2026-10
+2026-10-05,Nümunə B,Alış,30,3,3 AZN köçürmə,2026-10
+2026-10-06,Nümunə B,İfaçı,-8,,"Ichiko Aoba (Yaponiya, yerli, 100 min – 1 mln): 15 × 0,5 × 1,00",2026-10
+2026-10-09,Nümunə C,İfaçı,-15,,"Marisa Monte (Braziliya, yerli, 1–5 mln): 30 × 0,5 × 1,00",2026-10

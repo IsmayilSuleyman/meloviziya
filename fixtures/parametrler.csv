@@ -1,0 +1,30 @@
+Parametrlər,,
+"Mavi xanalar dəyişdirilə bilər. Dəyişiklik yalnız mövsümlər arasında, əvvəlki ayın 25-nə qədər elan edilməklə.",,
+,,
+Aylıq pay (səs),100,
+Alış limiti (səs / iştirakçı / mövsüm),60,
+Səs qiyməti (1 AZN = ... səs),10,
+Ölkə saxlama haqqı (səs),10,
+1-ci yer mükafatı (səs),30,
+2-ci yer mükafatı (səs),15,
+3-cü yer mükafatı (səs),10,
+1-ci yer mükafatı (AZN),20,
+Yerli ifaçı əmsalı,0.5,
+Xarici ifaçı əmsalı,2,
+İndeks minimum,0.5,
+İndeks maksimum,2,
+Cərimə: bülleten verməmə (səs),20,
+İfaçı karantini (mövsüm sayı),12,
+Minimum nümayəndə heyəti sayı,8,
+,,
+Baza qiymət pillələri (Spotify aylıq dinləyici sayına görə),,
+Aylıq dinləyici (bu saydan başlayaraq),Baza qiymət (səs),Pillə
+0,5,100 min-dən az
+100000,15,100 min – 1 mln
+1000000,30,1 – 5 mln
+5000000,50,5 – 20 mln
+20000000,75,20 – 50 mln
+50000000,100,50 mln və çox
+,,
+Qiymət = ROUNDUP(baza × əmsal × indeks). Dinləyici sayı iddia anında Spotify ifaçı səhifəsindəki rəqəmdir (ekran görüntüsü ilə).,,
+Mənbə: bütün rəqəmlər İsmayılın 22.09.2026 tarixli qərarlarıdır; Qaydalar v1 ilə eynidir.,,
