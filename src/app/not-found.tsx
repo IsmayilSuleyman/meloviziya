@@ -1,14 +1,19 @@
-import Link from "next/link";
+import { PageHeader } from "@/components/PageHeader";
+import { PillLink } from "@/components/PillLink";
+import { PosterTile } from "@/components/PosterTile";
 
 export default function NotFound() {
   return (
     <>
-      <h1 className="text-2xl font-semibold">Səhifə tapılmadı</h1>
-      <p className="mt-4">
-        <Link href="/" className="underline">
-          Ana səhifəyə qayıt
-        </Link>
-      </p>
+      <PageHeader title="Səhifə tapılmadı" accent="amber" eyebrow="404" />
+      <PosterTile accent="amber" tall>
+        <p aria-hidden className="numeral tnum">
+          404
+        </p>
+        <div className="mt-8">
+          <PillLink href="/">Ana səhifəyə qayıt</PillLink>
+        </div>
+      </PosterTile>
     </>
   );
 }

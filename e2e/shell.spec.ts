@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 const routes: [string, string][] = [
-  ["/", "Ana səhifə"],
+  ["/", "Meloviziya"],
   ["/qaydalar", "Qaydalar"],
   ["/teqvim", "Təqvim"],
   ["/movsum/2026-10", "Mövsüm 2026-10"],

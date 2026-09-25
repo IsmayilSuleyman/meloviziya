@@ -1,4 +1,8 @@
-/** Each section has its own stage-light colour: --c-<accent> and --n-<accent> in globals.css. */
+/**
+ * Each section has a flat poster "spot" colour (--n-<accent> in globals.css, the
+ * same in both schemes, always carrying ink text) and a text-safe shade of it for
+ * use on the page background (--c-<accent>).
+ */
 export type Accent = "rose" | "teal" | "orange" | "magenta" | "violet" | "green" | "blue" | "amber";
 
 export type NavItem = { href: string; label: string; accent: Accent };
@@ -19,12 +23,12 @@ export function isActive(href: string, pathname: string): boolean {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-/** Readable section colour for text and borders on the page background. */
+/** Readable section colour for text on the page background. */
 export function accentVar(accent: Accent): string {
   return `var(--c-${accent})`;
 }
 
-/** Bright version of the section colour for use on the dark header. */
+/** Flat spot colour of the section: poster tiles, the active nav pill, swatches. */
 export function neonVar(accent: Accent): string {
   return `var(--n-${accent})`;
 }

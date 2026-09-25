@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { Placeholder } from "@/components/Placeholder";
+import { SectionPage } from "@/components/SectionPage";
 
 export const metadata: Metadata = { title: "Cədvəl — Meloviziya" };
 
 export default function ScoreboardPage() {
-  return <Placeholder title="Cədvəl" empty="Nəticələr açıqlama günü burada görünəcək" accent="violet" />;
+  return <SectionPage title="Cədvəl" empty="Nəticələr açıqlama günü burada görünəcək" accent="violet" />;
 }

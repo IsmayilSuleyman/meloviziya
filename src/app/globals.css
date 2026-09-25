@@ -1,63 +1,95 @@
 @import "tailwindcss";
 
 /*
- * "Stage lights": a dark stage in the header, a coloured spotlight per section,
- * and a warm neon gradient as the signature. Section colours are the -700 shades
- * in light mode and the -300 shades in dark mode so text on them stays readable.
+ * "Afişa" (poster): ink type on paper, one flat spot colour per section.
+ * Layers: palette → semantic tokens → components. Spot colours are identical in
+ * both schemes and always carry ink text; the dark scheme only swaps paper for ink.
  */
 :root {
-  --background: #fbf8ff;
-  --foreground: #1c1530;
-  --subtle: #5b5170;
-  --surface: #ffffff;
-  --border: #e6ddf5;
+  /* Palette */
+  --paper: #f6f1e7;
+  --paper-2: #fffdf8;
+  --ink: #15121a;
+  --ink-2: #2b2634;
+  --muted: #5f586c;
+  --line: #d8d0c2;
+  --stage-ink: #0c0a10;
 
-  --stage: #140c2e;
-  --stage-2: #2a0f4f;
-  --on-stage: #ffffff;
-  --neon: linear-gradient(90deg, #ff3d8b 0%, #b44dff 35%, #3d7bff 65%, #1fd1c1 100%);
-  --title: linear-gradient(90deg, #c0126b, #7c2bd6 55%, #1d4ed8);
+  /* Spot colours, one per section (see src/lib/nav.ts). */
+  --n-rose: #ff6b9d;
+  --n-teal: #3fd6c4;
+  --n-orange: #ff8c42;
+  --n-magenta: #e88bff;
+  --n-violet: #a99bff;
+  --n-green: #5ee08a;
+  --n-blue: #7fc1ff;
+  --n-amber: #ffc83d;
 
-  --c-rose: #be123c;
-  --c-teal: #0f766e;
-  --c-orange: #c2410c;
+  /* Text-safe shades of the spot colours on paper. */
+  --c-rose: #c0164f;
+  --c-teal: #0b7d72;
+  --c-orange: #c2510a;
   --c-magenta: #a21caf;
-  --c-violet: #6d28d9;
-  --c-green: #047857;
-  --c-blue: #1d4ed8;
-  --c-amber: #b45309;
+  --c-violet: #5b3fd6;
+  --c-green: #0f7a3d;
+  --c-blue: #1a5fd0;
+  --c-amber: #a86400;
 
-  /* Neon versions for the dark stage (same in both schemes). */
-  --n-rose: #fb7185;
-  --n-teal: #2dd4bf;
-  --n-orange: #fb923c;
-  --n-magenta: #e879f9;
-  --n-violet: #a78bfa;
-  --n-green: #34d399;
-  --n-blue: #60a5fa;
-  --n-amber: #fbbf24;
+  /* Semantic */
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --subtle: var(--muted);
+  --surface: var(--paper-2);
+  --border: var(--line);
+  --stage: var(--stage-ink);
+  --on-stage: #f6f1e7;
+  --on-spot: #15121a;
+  --focus: #d6336c;
+  --pill-border: rgb(246 241 231 / 0.25);
+  --pill-hover-bg: rgb(246 241 231 / 0.12);
+  --badge-bg: #15121a;
+  --badge-fg: #f6f1e7;
+  --btn-bg: #15121a;
+  --btn-fg: #f6f1e7;
+  --btn-hover-bg: #2b2634;
+
+  /* Scales */
+  --space: 0.25rem;
+  --radius-sm: 0.125rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1.25rem;
+  --radius-pill: 999px;
+
+  --fs-body-xs: 0.75rem;
+  --fs-body-sm: 0.875rem;
+  --fs-body-md: 1rem;
+  --fs-body-lg: 1.125rem;
+  --fs-heading-sm: 1.5rem;
+  --fs-heading-md: clamp(1.5rem, 0.9rem + 2.6vw, 3rem);
+  --fs-heading-lg: clamp(2.75rem, 1.2rem + 7vw, 5.5rem);
+  --fs-heading-xl: clamp(2.4rem, 0.4rem + 9.4vw, 6.5rem);
+  --fs-heading-2xl: clamp(5rem, 2rem + 14vw, 9rem);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0d0820;
-    --foreground: #f1ecff;
-    --subtle: #b4a9cf;
-    --surface: #170f33;
-    --border: #2c2150;
+    --paper: #121016;
+    --paper-2: #1b1821;
+    --ink: #f4efe6;
+    --ink-2: #d9d2c6;
+    --muted: #aaa3b4;
+    --line: #2f2a38;
+    --stage-ink: #060509;
+    --focus: #ff8ab5;
 
-    --stage: #07040f;
-    --stage-2: #1d0b3d;
-    --title: linear-gradient(90deg, #ff6fae, #c28bff 55%, #7fb0ff);
-
-    --c-rose: #fda4af;
-    --c-teal: #5eead4;
-    --c-orange: #fdba74;
-    --c-magenta: #f0abfc;
-    --c-violet: #c4b5fd;
-    --c-green: #6ee7b7;
-    --c-blue: #93c5fd;
-    --c-amber: #fcd34d;
+    --c-rose: var(--n-rose);
+    --c-teal: var(--n-teal);
+    --c-orange: var(--n-orange);
+    --c-magenta: var(--n-magenta);
+    --c-violet: var(--n-violet);
+    --c-green: var(--n-green);
+    --c-blue: var(--n-blue);
+    --c-amber: var(--n-amber);
   }
 }
 
@@ -67,7 +99,10 @@
   --color-subtle: var(--subtle);
   --color-surface: var(--surface);
   --color-border: var(--border);
+  --color-on-stage: var(--on-stage);
+  --color-on-spot: var(--on-spot);
   --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-display: var(--font-unbounded), system-ui, sans-serif;
 }
 
 html {
@@ -76,109 +111,238 @@ html {
 
 body {
   background-color: var(--background);
-  background-image:
-    radial-gradient(60rem 30rem at 110% -10%, color-mix(in srgb, #b44dff 12%, transparent), transparent 70%),
-    radial-gradient(50rem 30rem at -20% 110%, color-mix(in srgb, #1fd1c1 10%, transparent), transparent 70%);
-  background-attachment: fixed;
   color: var(--foreground);
 }
 
-a:focus-visible {
-  outline: 2px solid #ff3d8b;
-  outline-offset: 2px;
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
 }
 
-/* Header: a dark stage with two coloured spotlights and a neon strip below. */
-.stage {
-  position: relative;
-  color: var(--on-stage);
-  background:
-    radial-gradient(28rem 14rem at 15% 0%, rgb(255 61 139 / 0.35), transparent 70%),
-    radial-gradient(28rem 14rem at 85% 0%, rgb(61 123 255 / 0.35), transparent 70%),
-    linear-gradient(180deg, var(--stage-2), var(--stage));
+/* On a spot-colour tile the ring is ink, so it stays visible on every colour. */
+.poster :focus-visible {
+  outline-color: var(--on-spot);
 }
 
-.stage::after {
-  content: "";
+/* Tabular figures for numerals that line up: season codes, ranks, points. */
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+.skip-link {
   position: absolute;
-  inset: auto 0 0 0;
-  height: 4px;
-  background: var(--neon);
+  top: calc(var(--space) * 3);
+  left: calc(var(--space) * 3);
+  z-index: 50;
+  padding: calc(var(--space) * 3) calc(var(--space) * 5);
+  border-radius: var(--radius-pill);
+  background: var(--n-amber);
+  color: var(--on-spot);
+  font-weight: 600;
+  transform: translateY(-200%);
+}
+
+.skip-link:focus-visible {
+  transform: none;
+}
+
+/* Header and footer: an ink band. */
+.stage {
+  background: var(--stage);
+  color: var(--on-stage);
+}
+
+/* Signature: the eight spot colours as flat printed segments. */
+.stripe {
+  height: 6px;
+  background: linear-gradient(
+    90deg,
+    var(--n-rose) 0 12.5%,
+    var(--n-teal) 12.5% 25%,
+    var(--n-orange) 25% 37.5%,
+    var(--n-magenta) 37.5% 50%,
+    var(--n-violet) 50% 62.5%,
+    var(--n-green) 62.5% 75%,
+    var(--n-blue) 75% 87.5%,
+    var(--n-amber) 87.5% 100%
+  );
 }
 
 .wordmark {
-  font-weight: 900;
-  letter-spacing: -0.03em;
-  background: linear-gradient(90deg, #ffffff 0%, #ffd1e6 45%, #b8f5ef 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  font-family: var(--font-display);
+  font-size: var(--fs-heading-sm);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--on-stage);
 }
 
 .nav-pill {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  border-radius: 999px;
-  padding: 0.4rem 0.85rem;
-  color: rgb(255 255 255 / 0.85);
-  transition: background-color 150ms, color 150ms;
+  gap: calc(var(--space) * 2);
+  border: 1px solid var(--pill-border);
+  border-radius: var(--radius-pill);
+  padding: calc(var(--space) * 2) calc(var(--space) * 3.5);
+  color: var(--on-stage);
+  transition: background-color 150ms, border-color 150ms, color 150ms;
 }
 
 .nav-pill:hover {
-  background: rgb(255 255 255 / 0.12);
-  color: #ffffff;
+  background: var(--pill-hover-bg);
+  border-color: var(--spot);
 }
 
-.nav-pill-active {
-  background: #ffffff;
-  color: var(--stage);
-}
-
+.nav-pill-active,
 .nav-pill-active:hover {
-  background: #ffffff;
-  color: var(--stage);
+  background: var(--spot);
+  border-color: var(--spot);
+  color: var(--on-spot);
 }
 
-.nav-dot {
+.nav-swatch {
   width: 0.5rem;
   height: 0.5rem;
-  border-radius: 999px;
-  background: var(--dot);
-  box-shadow: 0 0 8px var(--dot);
+  border-radius: var(--radius-sm);
+  background: var(--spot);
+}
+
+.nav-pill-active .nav-swatch {
+  background: var(--on-spot);
+}
+
+.eyebrow {
+  font-family: var(--font-display);
+  font-size: var(--fs-body-xs);
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--radius-pill);
+  padding: calc(var(--space) * 1.5) calc(var(--space) * 3.5);
+  background: var(--badge-bg);
+  color: var(--badge-fg);
+  font-family: var(--font-display);
+  font-size: var(--fs-body-xs);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
 .page-title {
-  font-size: clamp(1.9rem, 6vw, 2.75rem);
-  line-height: 1.1;
-  font-weight: 900;
+  font-family: var(--font-display);
+  font-size: var(--fs-heading-lg);
+  font-weight: 700;
+  line-height: 1;
   letter-spacing: -0.03em;
-  background: var(--title);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: var(--foreground);
+  text-wrap: balance;
 }
 
-.empty-card {
+.hero-title {
+  font-family: var(--font-display);
+  font-size: var(--fs-heading-xl);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+}
+
+/* Giant numeral: "404" on the missing page, the season number (ghosted) on the hero. */
+.numeral {
+  font-family: var(--font-display);
+  font-size: var(--fs-heading-2xl);
+  font-weight: 800;
+  line-height: 0.85;
+  letter-spacing: -0.05em;
+}
+
+.numeral-ghost {
+  color: color-mix(in srgb, var(--on-spot) 22%, transparent);
+}
+
+/* A flat colour block with ink text and a printed corner mark. */
+.poster {
   position: relative;
-  overflow: hidden;
-  border-radius: 1rem;
-  border: 1px solid var(--border);
-  background: color-mix(in srgb, var(--section) 7%, var(--surface));
-  padding: 1.25rem 1.25rem 1.25rem 1.5rem;
-  color: var(--section);
-  font-weight: 600;
+  border-radius: var(--radius-lg);
+  padding: clamp(1.25rem, 4vw, 2.5rem);
+  background: var(--spot);
+  color: var(--on-spot);
 }
 
-.empty-card::before {
+.poster::before {
   content: "";
   position: absolute;
-  inset: 0 auto 0 0;
-  width: 5px;
-  background: var(--section);
+  top: calc(var(--space) * 4);
+  right: calc(var(--space) * 4);
+  width: calc(var(--space) * 3);
+  height: calc(var(--space) * 3);
+  background: var(--on-spot);
+}
+
+.poster-tall {
+  display: flex;
+  min-height: clamp(12rem, 28vw, 18rem);
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.poster-text {
+  max-width: 22ch;
+  font-family: var(--font-display);
+  font-size: var(--fs-heading-md);
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.rule {
+  border: 0;
+  border-top: 2px solid currentColor;
+  margin: calc(var(--space) * 8) 0;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(var(--space) * 11);
+  border: 2px solid transparent;
+  border-radius: var(--radius-pill);
+  padding: 0 calc(var(--space) * 6);
+  font-size: var(--fs-body-sm);
+  font-weight: 600;
+  transition: background-color 150ms, color 150ms;
+}
+
+.btn-primary {
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+}
+
+.btn-primary:hover {
+  background: var(--btn-hover-bg);
+}
+
+.btn-secondary {
+  border-color: currentColor;
+}
+
+.btn-secondary:hover {
+  background: color-mix(in srgb, currentColor 12%, transparent);
 }
 
 .site-footer {
-  background: var(--stage);
-  color: rgb(255 255 255 / 0.75);
+  color: color-mix(in srgb, var(--on-stage) 78%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-pill,
+  .btn {
+    transition: none;
+  }
 }

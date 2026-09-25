@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { Placeholder } from "@/components/Placeholder";
+import { SectionPage } from "@/components/SectionPage";
 
 export const metadata: Metadata = { title: "Təqvim — Meloviziya" };
 
 export default function CalendarPage() {
-  return <Placeholder title="Təqvim" empty="Mövsüm hələ başlamayıb" accent="orange" />;
+  return <SectionPage title="Təqvim" empty="Mövsüm hələ başlamayıb" accent="orange" />;
 }

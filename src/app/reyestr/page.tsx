@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { Placeholder } from "@/components/Placeholder";
+import { SectionPage } from "@/components/SectionPage";
 
 export const metadata: Metadata = { title: "Reyestr — Meloviziya" };
 
 export default function LedgerPage() {
-  return <Placeholder title="Reyestr" empty="Mövsüm hələ başlamayıb" accent="green" />;
+  return <SectionPage title="Reyestr" empty="Mövsüm hələ başlamayıb" accent="green" />;
 }
