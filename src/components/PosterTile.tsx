@@ -1,19 +1,20 @@
 import type { ReactNode } from "react";
-import { type Accent, spotStyle } from "@/lib/nav";
+import { type Tone, toneProps } from "@/lib/nav";
 
-/** A flat block in the section's spot colour with ink text: the poster tile. */
+/** A flat block in the section's spot colour (or ink) with contrasting text: the poster tile. */
 export function PosterTile({
-  accent,
+  tone,
   tall = false,
   children,
 }: {
-  accent: Accent;
+  tone: Tone;
   /** Stretch to poster height and push the content to the bottom edge. */
   tall?: boolean;
   children: ReactNode;
 }) {
+  const { className, style } = toneProps(tone);
   return (
-    <section style={spotStyle(accent)} className={tall ? "poster poster-tall" : "poster"}>
+    <section style={style} className={["poster", tall ? "poster-tall" : "", className ?? ""].join(" ").trim()}>
       {children}
     </section>
   );

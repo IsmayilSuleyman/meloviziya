@@ -8,16 +8,21 @@
  * ledger is the paper the page and the footer sit on. Spot colours are identical
  * in both schemes and always carry ink text; the dark scheme swaps paper for ink.
  *
- * Component tokens (--btn-*, --focus) are set once here and re-scoped inside
- * .stage and .poster, so one .btn class works on paper, on ink and on a tile.
+ * Component tokens (--btn-*, --badge-*, --focus) are set once here in terms of
+ * paper and ink, so they follow the scheme; .poster and .tone-ink re-scope them,
+ * so one .btn class works on paper, on ink and on a tile.
  */
 :root {
-  /* Palette: paper and ink (the ledger). */
-  --paper: #f6f1e7;
-  --ink: #15121a;
+  /* Palette: fixed names, the same in both schemes. */
+  --cream: #f6f1e7;
+  --ink-900: #15121a;
+  --ink-700: #2b2634;
+
+  /* Palette: paper and ink (the ledger); the dark scheme swaps them. */
+  --paper: var(--cream);
+  --ink: var(--ink-900);
   --ink-2: #5f586c;
   --rule: #d8d0c2;
-  --rule-2: #ebe5d9;
   --stage-ink: #0c0a10;
 
   /* Spot colours, one per section (see src/lib/nav.ts). */
@@ -42,21 +47,20 @@
 
   /* Semantic: surfaces */
   --stage: var(--stage-ink);
-  --on-stage: #f6f1e7;
-  --on-stage-2: rgb(246 241 231 / 0.72);
-  --stage-rule: rgb(246 241 231 / 0.16);
-  --glass: rgb(246 241 231 / 0.08);
-  --glass-hover: rgb(246 241 231 / 0.16);
-  --on-spot: #15121a;
+  --on-stage: var(--cream);
+  --stage-rule: color-mix(in srgb, var(--cream) 16%, transparent);
+  --glass: color-mix(in srgb, var(--cream) 8%, transparent);
+  --glass-hover: color-mix(in srgb, var(--cream) 16%, transparent);
+  --on-spot: var(--ink-900);
   --spot-glow: 28%;
 
-  /* Semantic: components (paper context; .stage and .poster re-scope these) */
+  /* Semantic: components (paper context; .poster and .tone-ink re-scope these) */
   --focus: #d6336c;
-  --badge-bg: #15121a;
-  --badge-fg: #f6f1e7;
-  --btn-bg: #15121a;
-  --btn-fg: #f6f1e7;
-  --btn-hover-bg: #2b2634;
+  --badge-bg: var(--ink);
+  --badge-fg: var(--paper);
+  --btn-bg: var(--ink);
+  --btn-fg: var(--paper);
+  --btn-hover-bg: color-mix(in srgb, var(--ink) 85%, var(--paper));
 
   /* Scales */
   --space: 0.25rem;
@@ -71,9 +75,8 @@
     --ink: #f4efe6;
     --ink-2: #aaa3b4;
     --rule: #2f2a38;
-    --rule-2: #221e2a;
     --stage-ink: #07060b;
-    --spot-glow: 24%;
+    --spot-glow: 12%;
     --focus: #ff8ab5;
 
     /* On dark paper the spot colours themselves are readable as text. */
@@ -93,7 +96,6 @@
   --color-rule: var(--rule);
 
   --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-display: var(--font-unbounded), system-ui, sans-serif;
 
   /* Type scale: body steps in the sans, heading steps in the display face.
      Heading clamps are derived from Unbounded's advance widths so the longest
@@ -106,8 +108,6 @@
   --text-body-md--line-height: 1.6;
   --text-body-lg: 1.125rem;
   --text-body-lg--line-height: 1.6;
-  --text-heading-sm: 1.5rem;
-  --text-heading-sm--line-height: 1;
   --text-heading-md: 1.5rem;
   --text-heading-md--line-height: 1.2;
   --text-heading-lg: clamp(1.5rem, 0.9rem + 2.6vw, 2.75rem);
@@ -127,17 +127,26 @@
 
 html {
   color-scheme: light dark;
+  /* The display face is applied through the selector list below, not a utility. */
+  --font-display: var(--font-unbounded), system-ui, sans-serif;
 }
 
 body {
   background-color: var(--paper);
   color: var(--ink);
+  font-size: var(--text-body-md);
+  line-height: var(--text-body-md--line-height);
   font-variant-numeric: proportional-nums;
 }
 
 :focus-visible {
   outline: 3px solid var(--focus);
   outline-offset: 3px;
+}
+
+/* main is only a programmatic focus target (the skip link); the scroll is the feedback. */
+main:focus-visible {
+  outline: none;
 }
 
 /* Every display-face element, at one of three weights: 700 headings, 600 tile
@@ -169,13 +178,10 @@ body {
   transform: none;
 }
 
-/* The stage: an ink band. Buttons and the focus ring invert to stay visible. */
+/* The stage: an ink band. */
 .stage {
   background: var(--stage);
   color: var(--on-stage);
-  --btn-bg: var(--on-stage);
-  --btn-fg: var(--stage);
-  --btn-hover-bg: #ffffff;
 }
 
 /* Signature: the eight spot colours as flat printed segments, once, under the header. */
@@ -198,11 +204,22 @@ body {
   display: inline-flex;
   align-items: center;
   min-height: calc(var(--space) * 11);
-  font-size: var(--text-heading-sm);
+  font-size: var(--text-heading-md);
   font-weight: 700;
-  line-height: var(--text-heading-sm--line-height);
+  line-height: 1;
   letter-spacing: -0.04em;
   color: var(--on-stage);
+}
+
+/* Below lg the nav is a scroller: the edges fade so a half-cut tab reads as
+   "more", and the scroll padding leaves room for a focused tab's ring. (No scroll
+   snapping: proximity snapping pulls a tab scrolled into view on focus back out.) */
+@media (max-width: 63.99rem) {
+  .nav-scroller {
+    scroll-padding-inline: 1.5rem;
+    mask-image: linear-gradient(90deg, transparent, #000 1rem, #000 calc(100% - 1rem), transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 1rem, #000 calc(100% - 1rem), transparent);
+  }
 }
 
 /* The nav: a translucent pill that holds the tabs; the current one is filled
@@ -224,7 +241,7 @@ body {
   gap: calc(var(--space) * 2);
   min-height: calc(var(--space) * 11);
   border-radius: var(--radius-pill);
-  padding: 0 calc(var(--space) * 3.5);
+  padding: 0 calc(var(--space) * 3);
   color: var(--on-stage);
 }
 
@@ -271,45 +288,37 @@ body {
   color: var(--badge-fg);
 }
 
-/* A page header on paper, lit by a spotlight in the section colour. The box
-   never rises above main, and the ellipse (radii below, transparent from 70%)
-   fades out fully inside it, so it neither paints over the header nor leaves a
-   hard edge or a sideways scroll: 14rem × 7rem radii at 9.8rem span 0–19.6rem. */
+/* A page header on paper, lit by a spotlight in the section colour. The light is
+   an ellipse fitted to the title's own box (a little wider and taller than the
+   text), so it follows the title's length; the header clips it sideways so it
+   never causes a sideways scroll, and isolates it so it stays behind the text. */
 .page-stage {
   position: relative;
   isolation: isolate;
-}
-
-.page-stage::before {
-  content: "";
-  position: absolute;
-  inset: calc(var(--space) * -8) 0 calc(var(--space) * -12);
-  z-index: -1;
-  pointer-events: none;
-  background: radial-gradient(
-    14rem 7rem at 9.8rem 50%,
-    color-mix(in srgb, var(--spot) var(--spot-glow), transparent),
-    transparent 70%
-  );
-}
-
-/* On wider screens the light sits further into the title: 20rem × 7rem at 14rem. */
-@media (min-width: 48rem) {
-  .page-stage::before {
-    background: radial-gradient(
-      20rem 7rem at 14rem 50%,
-      color-mix(in srgb, var(--spot) var(--spot-glow), transparent),
-      transparent 70%
-    );
-  }
+  overflow-x: clip;
 }
 
 .page-title {
+  position: relative;
+  width: fit-content;
   font-size: var(--text-heading-xl);
   font-weight: 700;
   line-height: var(--text-heading-xl--line-height);
   letter-spacing: -0.03em;
   text-wrap: balance;
+}
+
+.page-title::before {
+  content: "";
+  position: absolute;
+  inset: -40% -12%;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--spot) var(--spot-glow), transparent),
+    transparent
+  );
 }
 
 .hero-title {
@@ -340,9 +349,25 @@ body {
   background: var(--spot);
   color: var(--on-spot);
   --focus: var(--on-spot);
+  --badge-bg: var(--on-spot);
+  --badge-fg: var(--cream);
   --btn-bg: var(--on-spot);
-  --btn-fg: #f6f1e7;
-  --btn-hover-bg: #2b2634;
+  --btn-fg: var(--cream);
+  --btn-hover-bg: var(--ink-700);
+}
+
+/* Ink instead of a section colour, for pages that belong to no section (404):
+   the tile is ink with paper text, the eyebrow is muted, the spotlight is off. */
+.tone-ink {
+  --spot: var(--ink);
+  --spot-text: var(--ink-2);
+  --on-spot: var(--paper);
+  --spot-glow: 0%;
+  --badge-bg: var(--paper);
+  --badge-fg: var(--ink);
+  --btn-bg: var(--paper);
+  --btn-fg: var(--ink);
+  --btn-hover-bg: color-mix(in srgb, var(--paper) 85%, var(--ink));
 }
 
 .poster::before {
@@ -413,3 +438,20 @@ body {
     transition: background-color 150ms, color 150ms;
   }
 }
+
+/* Forced colours drop backgrounds, so the current tab and the tile need an edge. */
+@media (forced-colors: active) {
+  .nav-tab[aria-current="page"] {
+    outline: 2px solid CanvasText;
+    outline-offset: -2px;
+  }
+
+  .nav-tab[aria-current="page"] .nav-swatch {
+    forced-color-adjust: none;
+  }
+
+  .poster {
+    border: 1px solid CanvasText;
+  }
+}
+

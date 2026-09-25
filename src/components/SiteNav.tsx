@@ -23,7 +23,10 @@ export function SiteNav() {
     <nav
       ref={navRef}
       aria-label="Əsas menyu"
-      className="-mx-4 overflow-x-auto px-4 py-1 sm:-mx-6 sm:px-6 lg:mx-0 lg:px-0"
+      className="nav-scroller -mx-4 overflow-x-auto px-4 py-1 sm:-mx-6 sm:px-6 lg:mx-0 lg:px-0"
+      // Browsers only scroll a fully hidden tab into view on focus; a half-cut one
+      // would keep its label and focus ring clipped, so scroll it ourselves.
+      onFocus={(e) => e.target.scrollIntoView({ block: "nearest", inline: "nearest" })}
     >
       {/* inline-flex keeps the scroller's end padding, so the last tab never sits flush with the edge. */}
       <ul className="nav-tabs whitespace-nowrap text-body-sm font-medium">

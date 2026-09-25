@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import Link from "next/link";
-import { PillLink } from "@/components/PillLink";
 import { SiteNav } from "@/components/SiteNav";
 import "./globals.css";
 
@@ -42,9 +41,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-6 text-body-sm sm:px-6">
             <p>Meloviziya Avropa Yayım Birliyi ilə əlaqəli deyil.</p>
             {telegramUrl ? (
-              <PillLink href={telegramUrl} variant="secondary" external>
+              <a href={telegramUrl} rel="noopener noreferrer" className="underline underline-offset-4">
                 Telegram qrupu
-              </PillLink>
+              </a>
             ) : null}
           </div>
         </footer>
