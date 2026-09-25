@@ -14,22 +14,22 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="az" className="h-full antialiased">
       <body className="flex min-h-full flex-col font-sans">
-        <header className="border-b border-border">
-          <div className="mx-auto max-w-4xl px-4 pt-4 pb-2">
-            <Link href="/" className="text-xl font-bold tracking-tight">
+        <header className="stage">
+          <div className="mx-auto max-w-4xl px-4 pt-5 pb-4">
+            <Link href="/" className="wordmark text-3xl">
               Meloviziya
             </Link>
-            <div className="mt-2">
+            <div className="mt-3">
               <SiteNav />
             </div>
           </div>
         </header>
         <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-6">{children}</main>
-        <footer className="border-t border-border">
-          <div className="mx-auto max-w-4xl space-y-1 px-4 py-4 text-sm text-subtle">
+        <footer className="site-footer">
+          <div className="mx-auto max-w-4xl space-y-1 px-4 py-4 text-sm">
             {telegramUrl ? (
               <p>
-                <a href={telegramUrl} className="underline" rel="noopener noreferrer">
+                <a href={telegramUrl} className="font-semibold text-white underline decoration-[#ff3d8b] decoration-2 underline-offset-4" rel="noopener noreferrer">
                   Telegram qrupu
                 </a>
               </p>

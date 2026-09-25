@@ -4,5 +4,5 @@ import { Placeholder } from "@/components/Placeholder";
 export const metadata: Metadata = { title: "Təqvim — Meloviziya" };
 
 export default function CalendarPage() {
-  return <Placeholder title="Təqvim" empty="Mövsüm hələ başlamayıb" />;
+  return <Placeholder title="Təqvim" empty="Mövsüm hələ başlamayıb" accent="orange" />;
 }

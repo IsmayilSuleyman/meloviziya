@@ -1,24 +1,63 @@
 @import "tailwindcss";
 
+/*
+ * "Stage lights": a dark stage in the header, a coloured spotlight per section,
+ * and a warm neon gradient as the signature. Section colours are the -700 shades
+ * in light mode and the -300 shades in dark mode so text on them stays readable.
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #1a1a1a;
-  --subtle: #5c5c5c;
-  --muted: #f0f0f0;
-  --border: #e2e2e2;
-  --accent: #1f3f8f;
-  --accent-contrast: #ffffff;
+  --background: #fbf8ff;
+  --foreground: #1c1530;
+  --subtle: #5b5170;
+  --surface: #ffffff;
+  --border: #e6ddf5;
+
+  --stage: #140c2e;
+  --stage-2: #2a0f4f;
+  --on-stage: #ffffff;
+  --neon: linear-gradient(90deg, #ff3d8b 0%, #b44dff 35%, #3d7bff 65%, #1fd1c1 100%);
+  --title: linear-gradient(90deg, #c0126b, #7c2bd6 55%, #1d4ed8);
+
+  --c-rose: #be123c;
+  --c-teal: #0f766e;
+  --c-orange: #c2410c;
+  --c-magenta: #a21caf;
+  --c-violet: #6d28d9;
+  --c-green: #047857;
+  --c-blue: #1d4ed8;
+  --c-amber: #b45309;
+
+  /* Neon versions for the dark stage (same in both schemes). */
+  --n-rose: #fb7185;
+  --n-teal: #2dd4bf;
+  --n-orange: #fb923c;
+  --n-magenta: #e879f9;
+  --n-violet: #a78bfa;
+  --n-green: #34d399;
+  --n-blue: #60a5fa;
+  --n-amber: #fbbf24;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #111214;
-    --foreground: #ececec;
-    --subtle: #a3a3a3;
-    --muted: #1f2125;
-    --border: #2d3036;
-    --accent: #8fb0ff;
-    --accent-contrast: #111214;
+    --background: #0d0820;
+    --foreground: #f1ecff;
+    --subtle: #b4a9cf;
+    --surface: #170f33;
+    --border: #2c2150;
+
+    --stage: #07040f;
+    --stage-2: #1d0b3d;
+    --title: linear-gradient(90deg, #ff6fae, #c28bff 55%, #7fb0ff);
+
+    --c-rose: #fda4af;
+    --c-teal: #5eead4;
+    --c-orange: #fdba74;
+    --c-magenta: #f0abfc;
+    --c-violet: #c4b5fd;
+    --c-green: #6ee7b7;
+    --c-blue: #93c5fd;
+    --c-amber: #fcd34d;
   }
 }
 
@@ -26,10 +65,8 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-subtle: var(--subtle);
-  --color-muted: var(--muted);
+  --color-surface: var(--surface);
   --color-border: var(--border);
-  --color-accent: var(--accent);
-  --color-accent-contrast: var(--accent-contrast);
   --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
@@ -38,11 +75,110 @@ html {
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
+  background-image:
+    radial-gradient(60rem 30rem at 110% -10%, color-mix(in srgb, #b44dff 12%, transparent), transparent 70%),
+    radial-gradient(50rem 30rem at -20% 110%, color-mix(in srgb, #1fd1c1 10%, transparent), transparent 70%);
+  background-attachment: fixed;
   color: var(--foreground);
 }
 
 a:focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid #ff3d8b;
   outline-offset: 2px;
+}
+
+/* Header: a dark stage with two coloured spotlights and a neon strip below. */
+.stage {
+  position: relative;
+  color: var(--on-stage);
+  background:
+    radial-gradient(28rem 14rem at 15% 0%, rgb(255 61 139 / 0.35), transparent 70%),
+    radial-gradient(28rem 14rem at 85% 0%, rgb(61 123 255 / 0.35), transparent 70%),
+    linear-gradient(180deg, var(--stage-2), var(--stage));
+}
+
+.stage::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 4px;
+  background: var(--neon);
+}
+
+.wordmark {
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  background: linear-gradient(90deg, #ffffff 0%, #ffd1e6 45%, #b8f5ef 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.nav-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  border-radius: 999px;
+  padding: 0.4rem 0.85rem;
+  color: rgb(255 255 255 / 0.85);
+  transition: background-color 150ms, color 150ms;
+}
+
+.nav-pill:hover {
+  background: rgb(255 255 255 / 0.12);
+  color: #ffffff;
+}
+
+.nav-pill-active {
+  background: #ffffff;
+  color: var(--stage);
+}
+
+.nav-pill-active:hover {
+  background: #ffffff;
+  color: var(--stage);
+}
+
+.nav-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: var(--dot);
+  box-shadow: 0 0 8px var(--dot);
+}
+
+.page-title {
+  font-size: clamp(1.9rem, 6vw, 2.75rem);
+  line-height: 1.1;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  background: var(--title);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.empty-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--section) 7%, var(--surface));
+  padding: 1.25rem 1.25rem 1.25rem 1.5rem;
+  color: var(--section);
+  font-weight: 600;
+}
+
+.empty-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 5px;
+  background: var(--section);
+}
+
+.site-footer {
+  background: var(--stage);
+  color: rgb(255 255 255 / 0.75);
 }

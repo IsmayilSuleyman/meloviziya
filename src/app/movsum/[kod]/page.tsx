@@ -13,5 +13,5 @@ export default async function SeasonPage({ params }: PageProps<"/movsum/[kod]">)
   const { kod } = await params;
   if (!SEASON_CODE.test(kod)) notFound();
 
-  return <Placeholder title={`Mövsüm ${kod}`} empty="Hələ iddia yoxdur" />;
+  return <Placeholder title={`Mövsüm ${kod}`} empty="Hələ iddia yoxdur" accent="magenta" />;
 }

@@ -1,8 +1,19 @@
-export function Placeholder({ title, empty }: { title: string; empty: string }) {
+import type { CSSProperties } from "react";
+import { type Accent, accentVar } from "@/lib/nav";
+
+export function Placeholder({
+  title,
+  empty,
+  accent,
+}: {
+  title: string;
+  empty: string;
+  accent: Accent;
+}) {
   return (
-    <>
-      <h1 className="text-2xl font-semibold">{title}</h1>
-      <p className="mt-4 text-subtle">{empty}</p>
-    </>
+    <div style={{ "--section": accentVar(accent) } as CSSProperties}>
+      <h1 className="page-title">{title}</h1>
+      <p className="empty-card mt-6">{empty}</p>
+    </div>
   );
 }
