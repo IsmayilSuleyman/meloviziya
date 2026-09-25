@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { Placeholder } from "@/components/Placeholder";
+import { SectionPage } from "@/components/SectionPage";
 
 export const metadata: Metadata = { title: "Arxiv — Meloviziya" };
 
 export default function ArchivePage() {
-  return <Placeholder title="Arxiv" empty="Arxiv boşdur" accent="amber" />;
+  return <SectionPage title="Arxiv" eyebrow="Meloviziya" empty="Arxiv boşdur" accent="amber" />;
 }

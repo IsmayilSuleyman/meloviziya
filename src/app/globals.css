@@ -1,184 +1,457 @@
 @import "tailwindcss";
 
 /*
- * "Stage lights": a dark stage in the header, a coloured spotlight per section,
- * and a warm neon gradient as the signature. Section colours are the -700 shades
- * in light mode and the -300 shades in dark mode so text on them stays readable.
+ * "Afişa" (poster): ink type on paper, one flat spot colour per section.
+ *
+ * Layers: palette → semantic tokens → components. The stage is the ink band of
+ * the header and a spotlight in the section colour behind each page title; the
+ * ledger is the paper the page and the footer sit on. Spot colours are identical
+ * in both schemes and always carry ink text; the dark scheme swaps paper for ink.
+ *
+ * Component tokens (--btn-*, --badge-*, --focus) are set once here in terms of
+ * paper and ink, so they follow the scheme; .poster and .tone-ink re-scope them,
+ * so one .btn class works on paper, on ink and on a tile.
  */
 :root {
-  --background: #fbf8ff;
-  --foreground: #1c1530;
-  --subtle: #5b5170;
-  --surface: #ffffff;
-  --border: #e6ddf5;
+  /* Palette: fixed names, the same in both schemes. */
+  --cream: #f6f1e7;
+  --ink-900: #15121a;
+  --ink-700: #2b2634;
 
-  --stage: #140c2e;
-  --stage-2: #2a0f4f;
-  --on-stage: #ffffff;
-  --neon: linear-gradient(90deg, #ff3d8b 0%, #b44dff 35%, #3d7bff 65%, #1fd1c1 100%);
-  --title: linear-gradient(90deg, #c0126b, #7c2bd6 55%, #1d4ed8);
+  /* Palette: paper and ink (the ledger); the dark scheme swaps them. */
+  --paper: var(--cream);
+  --ink: var(--ink-900);
+  --ink-2: #5f586c;
+  --rule: #d8d0c2;
+  --stage-ink: #0c0a10;
 
-  --c-rose: #be123c;
-  --c-teal: #0f766e;
-  --c-orange: #c2410c;
+  /* Spot colours, one per section (see src/lib/nav.ts). */
+  --n-rose: #ff6b9d;
+  --n-teal: #3fd6c4;
+  --n-orange: #ff8c42;
+  --n-magenta: #e88bff;
+  --n-violet: #a99bff;
+  --n-green: #5ee08a;
+  --n-blue: #7fc1ff;
+  --n-amber: #ffc83d;
+
+  /* Text-safe shades of the spot colours on paper (all ≥ 4.8:1). */
+  --c-rose: #c0164f;
+  --c-teal: #096b62;
+  --c-orange: #a8440a;
   --c-magenta: #a21caf;
-  --c-violet: #6d28d9;
-  --c-green: #047857;
-  --c-blue: #1d4ed8;
-  --c-amber: #b45309;
+  --c-violet: #5b3fd6;
+  --c-green: #0f7a3d;
+  --c-blue: #1a5fd0;
+  --c-amber: #8f5500;
 
-  /* Neon versions for the dark stage (same in both schemes). */
-  --n-rose: #fb7185;
-  --n-teal: #2dd4bf;
-  --n-orange: #fb923c;
-  --n-magenta: #e879f9;
-  --n-violet: #a78bfa;
-  --n-green: #34d399;
-  --n-blue: #60a5fa;
-  --n-amber: #fbbf24;
+  /* Semantic: surfaces */
+  --stage: var(--stage-ink);
+  --on-stage: var(--cream);
+  --stage-rule: color-mix(in srgb, var(--cream) 16%, transparent);
+  --glass: color-mix(in srgb, var(--cream) 8%, transparent);
+  --glass-hover: color-mix(in srgb, var(--cream) 16%, transparent);
+  --on-spot: var(--ink-900);
+  --spot-glow: 28%;
+
+  /* Semantic: components (paper context; .poster and .tone-ink re-scope these) */
+  --focus: #d6336c;
+  --badge-bg: var(--ink);
+  --badge-fg: var(--paper);
+  --btn-bg: var(--ink);
+  --btn-fg: var(--paper);
+  --btn-hover-bg: color-mix(in srgb, var(--ink) 85%, var(--paper));
+
+  /* Scales */
+  --space: 0.25rem;
+  --radius-sm: 0.125rem;
+  --radius-lg: 1.25rem;
+  --radius-pill: 999px;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0d0820;
-    --foreground: #f1ecff;
-    --subtle: #b4a9cf;
-    --surface: #170f33;
-    --border: #2c2150;
+    --paper: #15121b;
+    --ink: #f4efe6;
+    --ink-2: #aaa3b4;
+    --rule: #2f2a38;
+    --stage-ink: #07060b;
+    --spot-glow: 12%;
+    --focus: #ff8ab5;
 
-    --stage: #07040f;
-    --stage-2: #1d0b3d;
-    --title: linear-gradient(90deg, #ff6fae, #c28bff 55%, #7fb0ff);
-
-    --c-rose: #fda4af;
-    --c-teal: #5eead4;
-    --c-orange: #fdba74;
-    --c-magenta: #f0abfc;
-    --c-violet: #c4b5fd;
-    --c-green: #6ee7b7;
-    --c-blue: #93c5fd;
-    --c-amber: #fcd34d;
+    /* On dark paper the spot colours themselves are readable as text. */
+    --c-rose: var(--n-rose);
+    --c-teal: var(--n-teal);
+    --c-orange: var(--n-orange);
+    --c-magenta: var(--n-magenta);
+    --c-violet: var(--n-violet);
+    --c-green: var(--n-green);
+    --c-blue: var(--n-blue);
+    --c-amber: var(--n-amber);
   }
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-subtle: var(--subtle);
-  --color-surface: var(--surface);
-  --color-border: var(--border);
+  --color-ink-2: var(--ink-2);
+  --color-rule: var(--rule);
+
   --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  /* Type scale: body steps in the sans, heading steps in the display face.
+     Heading clamps are derived from Unbounded's advance widths so the longest
+     strings ("Səhifə tapılmadı", the empty states) never overflow 360px. */
+  --text-body-xs: 0.8125rem;
+  --text-body-xs--line-height: 1.4;
+  --text-body-sm: 0.875rem;
+  --text-body-sm--line-height: 1.5;
+  --text-body-md: 1rem;
+  --text-body-md--line-height: 1.6;
+  --text-body-lg: 1.125rem;
+  --text-body-lg--line-height: 1.6;
+  --text-heading-md: 1.5rem;
+  --text-heading-md--line-height: 1.2;
+  --text-heading-lg: clamp(1.5rem, 0.9rem + 2.6vw, 2.75rem);
+  --text-heading-lg--line-height: 1.12;
+  --text-heading-xl: clamp(2.75rem, 1.2rem + 7vw, 5.5rem);
+  --text-heading-xl--line-height: 1;
+  --text-heading-2xl: clamp(2.4rem, 0.4rem + 9.4vw, 6.5rem);
+  --text-heading-2xl--line-height: 0.95;
+  --text-heading-3xl: clamp(5rem, 2rem + 14vw, 9rem);
+  --text-heading-3xl--line-height: 0.85;
+}
+
+/* Tabular, lining figures for codes, ranks and points; prose keeps proportional ones. */
+@utility num {
+  font-variant-numeric: tabular-nums lining-nums;
 }
 
 html {
   color-scheme: light dark;
+  /* The display face is applied through the selector list below, not a utility. */
+  --font-display: var(--font-unbounded), system-ui, sans-serif;
 }
 
 body {
-  background-color: var(--background);
-  background-image:
-    radial-gradient(60rem 30rem at 110% -10%, color-mix(in srgb, #b44dff 12%, transparent), transparent 70%),
-    radial-gradient(50rem 30rem at -20% 110%, color-mix(in srgb, #1fd1c1 10%, transparent), transparent 70%);
-  background-attachment: fixed;
-  color: var(--foreground);
+  background-color: var(--paper);
+  color: var(--ink);
+  font-size: var(--text-body-md);
+  line-height: var(--text-body-md--line-height);
+  font-variant-numeric: proportional-nums;
 }
 
-a:focus-visible {
-  outline: 2px solid #ff3d8b;
-  outline-offset: 2px;
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
 }
 
-/* Header: a dark stage with two coloured spotlights and a neon strip below. */
-.stage {
-  position: relative;
-  color: var(--on-stage);
-  background:
-    radial-gradient(28rem 14rem at 15% 0%, rgb(255 61 139 / 0.35), transparent 70%),
-    radial-gradient(28rem 14rem at 85% 0%, rgb(61 123 255 / 0.35), transparent 70%),
-    linear-gradient(180deg, var(--stage-2), var(--stage));
+/* main is only a programmatic focus target (the skip link); the scroll is the feedback. */
+main:focus-visible {
+  outline: none;
 }
 
-.stage::after {
-  content: "";
+/* Every display-face element, at one of three weights: 700 headings, 600 tile
+   text, 500 labels. Character comes from the face, not from weight 900. */
+.wordmark,
+.eyebrow,
+.badge,
+.page-title,
+.hero-title,
+.numeral,
+.poster-text {
+  font-family: var(--font-display);
+}
+
+.skip-link {
   position: absolute;
-  inset: auto 0 0 0;
+  top: calc(var(--space) * 3);
+  left: calc(var(--space) * 3);
+  z-index: 50;
+  padding: calc(var(--space) * 3) calc(var(--space) * 5);
+  border-radius: var(--radius-pill);
+  background: var(--n-amber);
+  color: var(--on-spot);
+  font-weight: 600;
+  transform: translateY(-200%);
+}
+
+.skip-link:focus-visible {
+  transform: none;
+}
+
+/* The stage: an ink band. */
+.stage {
+  background: var(--stage);
+  color: var(--on-stage);
+}
+
+/* Signature: the eight spot colours as flat printed segments, once, under the header. */
+.stripe {
   height: 4px;
-  background: var(--neon);
+  background: linear-gradient(
+    90deg,
+    var(--n-rose) 0 12.5%,
+    var(--n-teal) 12.5% 25%,
+    var(--n-orange) 25% 37.5%,
+    var(--n-magenta) 37.5% 50%,
+    var(--n-violet) 50% 62.5%,
+    var(--n-green) 62.5% 75%,
+    var(--n-blue) 75% 87.5%,
+    var(--n-amber) 87.5% 100%
+  );
 }
 
 .wordmark {
-  font-weight: 900;
-  letter-spacing: -0.03em;
-  background: linear-gradient(90deg, #ffffff 0%, #ffd1e6 45%, #b8f5ef 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-.nav-pill {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  border-radius: 999px;
-  padding: 0.4rem 0.85rem;
-  color: rgb(255 255 255 / 0.85);
-  transition: background-color 150ms, color 150ms;
+  min-height: calc(var(--space) * 11);
+  font-size: var(--text-heading-md);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--on-stage);
 }
 
-.nav-pill:hover {
-  background: rgb(255 255 255 / 0.12);
-  color: #ffffff;
+/* Below lg the nav is a scroller: the edges fade so a half-cut tab reads as
+   "more", and the scroll padding leaves room for a focused tab's ring. (No scroll
+   snapping: proximity snapping pulls a tab scrolled into view on focus back out.) */
+@media (max-width: 63.99rem) {
+  .nav-scroller {
+    scroll-padding-inline: 1.5rem;
+    mask-image: linear-gradient(90deg, transparent, #000 1rem, #000 calc(100% - 1rem), transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 1rem, #000 calc(100% - 1rem), transparent);
+  }
 }
 
-.nav-pill-active {
-  background: #ffffff;
-  color: var(--stage);
+/* The nav: a translucent pill that holds the tabs; the current one is filled
+   in its section's spot colour, tying the nav to the page and the stripe. */
+.nav-tabs {
+  display: inline-flex;
+  gap: var(--space);
+  padding: var(--space);
+  border: 1px solid var(--stage-rule);
+  border-radius: var(--radius-pill);
+  background: var(--glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
-.nav-pill-active:hover {
-  background: #ffffff;
-  color: var(--stage);
+.nav-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--space) * 2);
+  min-height: calc(var(--space) * 11);
+  border-radius: var(--radius-pill);
+  padding: 0 calc(var(--space) * 3);
+  color: var(--on-stage);
 }
 
-.nav-dot {
+.nav-tab:hover {
+  background: var(--glass-hover);
+}
+
+.nav-tab[aria-current="page"],
+.nav-tab[aria-current="page"]:hover {
+  background: var(--spot);
+  color: var(--on-spot);
+}
+
+.nav-swatch {
   width: 0.5rem;
   height: 0.5rem;
-  border-radius: 999px;
-  background: var(--dot);
-  box-shadow: 0 0 8px var(--dot);
+  border-radius: var(--radius-sm);
+  background: var(--spot);
+}
+
+.nav-tab[aria-current="page"] .nav-swatch {
+  background: var(--on-spot);
+}
+
+/* Small labels in the display face: the eyebrow on paper, the badge as an ink pill. */
+.eyebrow,
+.badge {
+  font-size: var(--text-body-xs);
+  font-weight: 500;
+  line-height: var(--text-body-xs--line-height);
+  letter-spacing: 0.06em;
+}
+
+.eyebrow {
+  color: var(--spot-text);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--radius-pill);
+  padding: calc(var(--space) * 1.5) calc(var(--space) * 3.5);
+  background: var(--badge-bg);
+  color: var(--badge-fg);
+}
+
+/* A page header on paper, lit by a spotlight in the section colour. The light is
+   an ellipse fitted to the title's own box (a little wider and taller than the
+   text), so it follows the title's length; the header clips it sideways so it
+   never causes a sideways scroll, and isolates it so it stays behind the text. */
+.page-stage {
+  position: relative;
+  isolation: isolate;
+  overflow-x: clip;
 }
 
 .page-title {
-  font-size: clamp(1.9rem, 6vw, 2.75rem);
-  line-height: 1.1;
-  font-weight: 900;
+  position: relative;
+  width: fit-content;
+  font-size: var(--text-heading-xl);
+  font-weight: 700;
+  line-height: var(--text-heading-xl--line-height);
   letter-spacing: -0.03em;
-  background: var(--title);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  text-wrap: balance;
 }
 
-.empty-card {
+.page-title::before {
+  content: "";
+  position: absolute;
+  inset: -40% -12%;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--spot) var(--spot-glow), transparent),
+    transparent
+  );
+}
+
+.hero-title {
+  font-size: var(--text-heading-2xl);
+  font-weight: 700;
+  line-height: var(--text-heading-2xl--line-height);
+  letter-spacing: -0.04em;
+}
+
+/* Giant numeral: "404" on the missing page, the season number (ghosted) on the hero. */
+.numeral {
+  font-size: var(--text-heading-3xl);
+  font-weight: 700;
+  line-height: var(--text-heading-3xl--line-height);
+  letter-spacing: -0.05em;
+}
+
+.numeral-ghost {
+  color: color-mix(in srgb, var(--on-spot) 22%, transparent);
+}
+
+/* A flat colour block with ink text and a printed corner mark. The focus ring
+   and buttons re-scope to ink so they stay visible on every spot colour. */
+.poster {
   position: relative;
-  overflow: hidden;
-  border-radius: 1rem;
-  border: 1px solid var(--border);
-  background: color-mix(in srgb, var(--section) 7%, var(--surface));
-  padding: 1.25rem 1.25rem 1.25rem 1.5rem;
-  color: var(--section);
+  border-radius: var(--radius-lg);
+  padding: clamp(1.25rem, 4vw, 2.5rem);
+  background: var(--spot);
+  color: var(--on-spot);
+  --focus: var(--on-spot);
+  --badge-bg: var(--on-spot);
+  --badge-fg: var(--cream);
+  --btn-bg: var(--on-spot);
+  --btn-fg: var(--cream);
+  --btn-hover-bg: var(--ink-700);
+}
+
+/* Ink instead of a section colour, for pages that belong to no section (404):
+   the tile is ink with paper text, the eyebrow is muted, the spotlight is off. */
+.tone-ink {
+  --spot: var(--ink);
+  --spot-text: var(--ink-2);
+  --on-spot: var(--paper);
+  --spot-glow: 0%;
+  --badge-bg: var(--paper);
+  --badge-fg: var(--ink);
+  --btn-bg: var(--paper);
+  --btn-fg: var(--ink);
+  --btn-hover-bg: color-mix(in srgb, var(--paper) 85%, var(--ink));
+}
+
+.poster::before {
+  content: "";
+  position: absolute;
+  top: calc(var(--space) * 4);
+  right: calc(var(--space) * 4);
+  width: calc(var(--space) * 3);
+  height: calc(var(--space) * 3);
+  background: var(--on-spot);
+}
+
+.poster-tall {
+  display: flex;
+  min-height: clamp(9rem, 20vw, 12rem);
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.poster-text {
+  max-width: 22ch;
+  font-size: var(--text-heading-lg);
+  font-weight: 600;
+  line-height: var(--text-heading-lg--line-height);
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+/* Hairline discipline: a 2px ink rule inside a tile, 1px --rule on paper (tables later). */
+.rule {
+  border: 0;
+  border-top: 2px solid currentColor;
+  margin: calc(var(--space) * 8) 0;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(var(--space) * 11);
+  border: 2px solid transparent;
+  border-radius: var(--radius-pill);
+  padding: 0 calc(var(--space) * 6);
+  font-size: var(--text-body-sm);
   font-weight: 600;
 }
 
-.empty-card::before {
-  content: "";
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: 5px;
-  background: var(--section);
+.btn-primary {
+  background: var(--btn-bg);
+  color: var(--btn-fg);
 }
 
-.site-footer {
-  background: var(--stage);
-  color: rgb(255 255 255 / 0.75);
+.btn-primary:hover {
+  background: var(--btn-hover-bg);
 }
+
+.btn-secondary {
+  border-color: currentColor;
+}
+
+.btn-secondary:hover {
+  background: color-mix(in srgb, currentColor 12%, transparent);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .nav-tab,
+  .btn {
+    transition: background-color 150ms, color 150ms;
+  }
+}
+
+/* Forced colours drop backgrounds, so the current tab and the tile need an edge. */
+@media (forced-colors: active) {
+  .nav-tab[aria-current="page"] {
+    outline: 2px solid CanvasText;
+    outline-offset: -2px;
+  }
+
+  .nav-tab[aria-current="page"] .nav-swatch {
+    forced-color-adjust: none;
+  }
+
+  .poster {
+    border: 1px solid CanvasText;
+  }
+}
+

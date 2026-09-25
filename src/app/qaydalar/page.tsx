@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { Placeholder } from "@/components/Placeholder";
+import { SectionPage } from "@/components/SectionPage";
 
 export const metadata: Metadata = { title: "Qaydalar — Meloviziya" };
 
 export default function RulesPage() {
-  return <Placeholder title="Qaydalar" empty="Mövsüm hələ başlamayıb" accent="teal" />;
+  return <SectionPage title="Qaydalar" eyebrow="Meloviziya" empty="Mövsüm hələ başlamayıb" accent="teal" />;
 }

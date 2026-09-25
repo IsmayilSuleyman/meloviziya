@@ -18,7 +18,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Headings use the self-hosted [Unbounded](https://github.com/googlefonts/unbounded) variable font (`src/app/fonts/`, SIL Open Font License 1.1, see `src/app/fonts/OFL.txt`), loaded with `next/font/local`; body text stays on the system sans stack.
 
 ## Learn More
 

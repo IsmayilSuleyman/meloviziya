@@ -41,6 +41,9 @@ yarn-error.log*
 next-env.d.ts
 !.env.example
 
+# claude code worktrees
+/.claude/worktrees/
+
 # playwright
 /test-results/
 /playwright-report/

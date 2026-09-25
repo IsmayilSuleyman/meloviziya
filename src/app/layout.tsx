@@ -1,7 +1,15 @@
 import type { Metadata } from "next";
+import localFont from "next/font/local";
 import Link from "next/link";
 import { SiteNav } from "@/components/SiteNav";
 import "./globals.css";
+
+const display = localFont({
+  src: "./fonts/Unbounded[wght].woff2",
+  weight: "500 700",
+  display: "swap",
+  variable: "--font-unbounded",
+});
 
 export const metadata: Metadata = {
   title: "Meloviziya",
@@ -12,29 +20,31 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   const telegramUrl = process.env.NEXT_PUBLIC_TELEGRAM_URL;
 
   return (
-    <html lang="az" className="h-full antialiased">
+    <html lang="az" className={`${display.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col font-sans">
+        <a href="#esas-mezmun" className="skip-link">
+          Əsas məzmuna keç
+        </a>
         <header className="stage">
-          <div className="mx-auto max-w-4xl px-4 pt-5 pb-4">
-            <Link href="/" className="wordmark text-3xl">
+          <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 pt-4 pb-3 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:py-3">
+            <Link href="/" className="wordmark self-start">
               Meloviziya
             </Link>
-            <div className="mt-3">
-              <SiteNav />
-            </div>
+            <SiteNav />
           </div>
+          <div className="stripe" aria-hidden />
         </header>
-        <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-6">{children}</main>
-        <footer className="site-footer">
-          <div className="mx-auto max-w-4xl space-y-1 px-4 py-4 text-sm">
-            {telegramUrl ? (
-              <p>
-                <a href={telegramUrl} className="font-semibold text-white underline decoration-[#ff3d8b] decoration-2 underline-offset-4" rel="noopener noreferrer">
-                  Telegram qrupu
-                </a>
-              </p>
-            ) : null}
+        <main id="esas-mezmun" tabIndex={-1} className="mx-auto w-full max-w-6xl flex-1 px-4 py-8 sm:px-6 sm:py-12">
+          {children}
+        </main>
+        <footer className="border-t border-rule text-ink-2">
+          <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-6 text-body-sm sm:px-6">
             <p>Meloviziya Avropa Yayım Birliyi ilə əlaqəli deyil.</p>
+            {telegramUrl ? (
+              <a href={telegramUrl} rel="noopener noreferrer" className="underline underline-offset-4">
+                Telegram qrupu
+              </a>
+            ) : null}
           </div>
         </footer>
       </body>

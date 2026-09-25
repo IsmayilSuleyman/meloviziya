@@ -1,5 +1,14 @@
-/** Each section has its own stage-light colour: --c-<accent> and --n-<accent> in globals.css. */
+import type { CSSProperties } from "react";
+
+/**
+ * Each section has a flat poster "spot" colour (--n-<accent> in globals.css, the
+ * same in both schemes, always carrying ink text) and a text-safe shade of it for
+ * use on the page background (--c-<accent>).
+ */
 export type Accent = "rose" | "teal" | "orange" | "magenta" | "violet" | "green" | "blue" | "amber";
+
+/** A section accent, or plain ink for pages that belong to no section (the 404). */
+export type Tone = Accent | "ink";
 
 export type NavItem = { href: string; label: string; accent: Accent };
 
@@ -19,12 +28,25 @@ export function isActive(href: string, pathname: string): boolean {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-/** Readable section colour for text and borders on the page background. */
+/** Readable section colour for text on the page background. */
 export function accentVar(accent: Accent): string {
   return `var(--c-${accent})`;
 }
 
-/** Bright version of the section colour for use on the dark header. */
+/** Flat spot colour of the section: poster tiles, the active nav tab, swatches. */
 export function neonVar(accent: Accent): string {
   return `var(--n-${accent})`;
+}
+
+/** Inline style that hands a section's spot colour and text shade to the CSS classes. */
+export function spotStyle(accent: Accent): CSSProperties {
+  return { "--spot": neonVar(accent), "--spot-text": accentVar(accent) } as CSSProperties;
+}
+
+/**
+ * Class and style for a tone: a section accent sets the spot variables inline,
+ * ink uses the .tone-ink re-scope from globals.css instead.
+ */
+export function toneProps(tone: Tone): { className?: string; style?: CSSProperties } {
+  return tone === "ink" ? { className: "tone-ink" } : { style: spotStyle(tone) };
 }

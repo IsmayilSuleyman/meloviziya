@@ -1,14 +1,22 @@
-import Link from "next/link";
+import type { Metadata } from "next";
+import { PageHeader } from "@/components/PageHeader";
+import { PillLink } from "@/components/PillLink";
+import { PosterTile } from "@/components/PosterTile";
+
+export const metadata: Metadata = { title: "Səhifə tapılmadı — Meloviziya" };
 
 export default function NotFound() {
   return (
     <>
-      <h1 className="text-2xl font-semibold">Səhifə tapılmadı</h1>
-      <p className="mt-4">
-        <Link href="/" className="underline">
-          Ana səhifəyə qayıt
-        </Link>
-      </p>
+      <PageHeader title="Səhifə tapılmadı" tone="ink" eyebrow="Meloviziya" />
+      <PosterTile tone="ink" tall>
+        <p aria-hidden className="numeral num">
+          404
+        </p>
+        <div className="mt-8">
+          <PillLink href="/">Ana səhifəyə qayıt</PillLink>
+        </div>
+      </PosterTile>
     </>
   );
 }

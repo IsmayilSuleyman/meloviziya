@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { NAV_ITEMS, isActive } from "./nav";
+import { NAV_ITEMS, isActive, spotStyle, toneProps } from "./nav";
 
 describe("NAV_ITEMS", () => {
   it("lists the eight sections in the order CLAUDE.md gives", () => {
@@ -25,5 +25,18 @@ describe("isActive", () => {
   it("matches a section and its subpages", () => {
     expect(isActive("/movsum", "/movsum/2026-10")).toBe(true);
     expect(isActive("/movsum", "/movsumlar")).toBe(false);
+  });
+});
+
+describe("spotStyle", () => {
+  it("hands the section's spot colour and text shade to CSS", () => {
+    expect(spotStyle("rose")).toEqual({ "--spot": "var(--n-rose)", "--spot-text": "var(--c-rose)" });
+  });
+});
+
+describe("toneProps", () => {
+  it("styles a section accent inline and ink through the class", () => {
+    expect(toneProps("teal")).toEqual({ style: spotStyle("teal") });
+    expect(toneProps("ink")).toEqual({ className: "tone-ink" });
   });
 });
