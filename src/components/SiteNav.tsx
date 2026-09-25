@@ -1,9 +1,9 @@
 "use client";
 
-import { type CSSProperties, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { NAV_ITEMS, isActive, neonVar } from "@/lib/nav";
+import { NAV_ITEMS, isActive, spotStyle } from "@/lib/nav";
 
 export function SiteNav() {
   const pathname = usePathname();
@@ -25,23 +25,21 @@ export function SiteNav() {
       aria-label="Əsas menyu"
       className="-mx-4 overflow-x-auto px-4 py-1 sm:-mx-6 sm:px-6 lg:mx-0 lg:px-0"
     >
-      <ul className="flex gap-1.5 whitespace-nowrap text-sm font-medium">
-        {NAV_ITEMS.map((item) => {
-          const active = isActive(item.href, pathname);
-          return (
-            <li key={item.href}>
-              <Link
-                href={item.href}
-                aria-current={active ? "page" : undefined}
-                style={{ "--spot": neonVar(item.accent) } as CSSProperties}
-                className={active ? "nav-pill nav-pill-active" : "nav-pill"}
-              >
-                <span aria-hidden className="nav-swatch" />
-                {item.label}
-              </Link>
-            </li>
-          );
-        })}
+      {/* inline-flex keeps the scroller's end padding, so the last tab never sits flush with the edge. */}
+      <ul className="nav-tabs whitespace-nowrap text-body-sm font-medium">
+        {NAV_ITEMS.map((item) => (
+          <li key={item.href}>
+            <Link
+              href={item.href}
+              aria-current={isActive(item.href, pathname) ? "page" : undefined}
+              style={spotStyle(item.accent)}
+              className="nav-tab"
+            >
+              <span aria-hidden className="nav-swatch" />
+              {item.label}
+            </Link>
+          </li>
+        ))}
       </ul>
     </nav>
   );

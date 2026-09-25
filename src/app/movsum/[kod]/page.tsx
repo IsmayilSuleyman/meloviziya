@@ -13,5 +13,6 @@ export default async function SeasonPage({ params }: PageProps<"/movsum/[kod]">)
   const { kod } = await params;
   if (!SEASON_CODE.test(kod)) notFound();
 
-  return <SectionPage title={`Mövsüm ${kod}`} empty="Hələ iddia yoxdur" accent="magenta" />;
+  // The title already carries the code, so the eyebrow is the site name, not the season label.
+  return <SectionPage title={`Mövsüm ${kod}`} eyebrow="Meloviziya" empty="Hələ iddia yoxdur" accent="magenta" />;
 }

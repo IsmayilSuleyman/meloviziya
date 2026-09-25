@@ -1,3 +1,5 @@
+import type { CSSProperties } from "react";
+
 /**
  * Each section has a flat poster "spot" colour (--n-<accent> in globals.css, the
  * same in both schemes, always carrying ink text) and a text-safe shade of it for
@@ -28,7 +30,12 @@ export function accentVar(accent: Accent): string {
   return `var(--c-${accent})`;
 }
 
-/** Flat spot colour of the section: poster tiles, the active nav pill, swatches. */
+/** Flat spot colour of the section: poster tiles, the active nav tab, swatches. */
 export function neonVar(accent: Accent): string {
   return `var(--n-${accent})`;
+}
+
+/** Inline style that hands a section's spot colour and text shade to the CSS classes. */
+export function spotStyle(accent: Accent): CSSProperties {
+  return { "--spot": neonVar(accent), "--spot-text": accentVar(accent) } as CSSProperties;
 }

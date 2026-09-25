@@ -7,7 +7,7 @@ export default function NotFound() {
     <>
       <PageHeader title="Səhifə tapılmadı" accent="amber" eyebrow="404" />
       <PosterTile accent="amber" tall>
-        <p aria-hidden className="numeral tnum">
+        <p aria-hidden className="numeral num">
           404
         </p>
         <div className="mt-8">

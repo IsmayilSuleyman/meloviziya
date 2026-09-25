@@ -1,5 +1,5 @@
-import type { CSSProperties, ReactNode } from "react";
-import { type Accent, neonVar } from "@/lib/nav";
+import type { ReactNode } from "react";
+import { type Accent, spotStyle } from "@/lib/nav";
 
 /** A flat block in the section's spot colour with ink text: the poster tile. */
 export function PosterTile({
@@ -13,10 +13,7 @@ export function PosterTile({
   children: ReactNode;
 }) {
   return (
-    <section
-      style={{ "--spot": neonVar(accent) } as CSSProperties}
-      className={tall ? "poster poster-tall" : "poster"}
-    >
+    <section style={spotStyle(accent)} className={tall ? "poster poster-tall" : "poster"}>
       {children}
     </section>
   );

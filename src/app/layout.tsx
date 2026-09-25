@@ -27,8 +27,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           Əsas məzmuna keç
         </a>
         <header className="stage">
-          <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 pt-5 pb-3 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:py-4">
-            <Link href="/" className="wordmark">
+          <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 pt-4 pb-3 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:py-3">
+            <Link href="/" className="wordmark self-start">
               Meloviziya
             </Link>
             <SiteNav />
@@ -38,9 +38,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <main id="esas-mezmun" tabIndex={-1} className="mx-auto w-full max-w-6xl flex-1 px-4 py-8 sm:px-6 sm:py-12">
           {children}
         </main>
-        <footer className="stage site-footer">
-          <div className="stripe" aria-hidden />
-          <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-6 text-sm sm:px-6">
+        <footer className="border-t border-rule text-ink-2">
+          <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-6 text-body-sm sm:px-6">
             <p>Meloviziya Avropa Yayım Birliyi ilə əlaqəli deyil.</p>
             {telegramUrl ? (
               <PillLink href={telegramUrl} variant="secondary" external>
