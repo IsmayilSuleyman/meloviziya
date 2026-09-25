@@ -7,6 +7,9 @@ import type { CSSProperties } from "react";
  */
 export type Accent = "rose" | "teal" | "orange" | "magenta" | "violet" | "green" | "blue" | "amber";
 
+/** A section accent, or plain ink for pages that belong to no section (the 404). */
+export type Tone = Accent | "ink";
+
 export type NavItem = { href: string; label: string; accent: Accent };
 
 export const NAV_ITEMS: readonly NavItem[] = [
@@ -38,4 +41,12 @@ export function neonVar(accent: Accent): string {
 /** Inline style that hands a section's spot colour and text shade to the CSS classes. */
 export function spotStyle(accent: Accent): CSSProperties {
   return { "--spot": neonVar(accent), "--spot-text": accentVar(accent) } as CSSProperties;
+}
+
+/**
+ * Class and style for a tone: a section accent sets the spot variables inline,
+ * ink uses the .tone-ink re-scope from globals.css instead.
+ */
+export function toneProps(tone: Tone): { className?: string; style?: CSSProperties } {
+  return tone === "ink" ? { className: "tone-ink" } : { style: spotStyle(tone) };
 }
