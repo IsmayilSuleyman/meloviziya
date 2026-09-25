@@ -7,7 +7,7 @@ import "./globals.css";
 
 const display = localFont({
   src: "./fonts/Unbounded[wght].woff2",
-  weight: "200 900",
+  weight: "500 700",
   display: "swap",
   variable: "--font-unbounded",
 });
